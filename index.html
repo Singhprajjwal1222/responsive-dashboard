@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Home energy dashboard</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<div class="app">
+  <header class="nav">
+    <div class="brand"><i aria-hidden="true"></i>Solstice</div>
+    <nav class="links" aria-label="Main">
+      <a href="#" aria-current="page">Overview</a>
+      <a href="#">Solar</a>
+      <a href="#">Battery</a>
+      <a href="#">Devices</a>
+      <a href="#">Settings</a>
+    </nav>
+    <button class="theme" id="theme" type="button">Switch theme</button>
+  </header>
+
+  <main>
+    <div class="head">
+      <div>
+        <h1>Today at home</h1>
+        <p>Updated 2 minutes ago</p>
+      </div>
+      <div class="range" role="group" aria-label="Time range">
+        <button type="button" aria-pressed="true">Day</button>
+        <button type="button" aria-pressed="false">Week</button>
+        <button type="button" aria-pressed="false">Month</button>
+      </div>
+    </div>
+
+    <section class="grid" aria-label="Dashboard">
+      <article class="card kpi">
+        <h2>Solar generated</h2>
+        <p class="big">18.4<small>kWh</small></p>
+        <span class="delta up">+12% vs yesterday</span>
+      </article>
+      <article class="card kpi">
+        <h2>Home usage</h2>
+        <p class="big">11.2<small>kWh</small></p>
+        <span class="delta down">+4% vs yesterday</span>
+      </article>
+      <article class="card kpi">
+        <h2>Battery charge</h2>
+        <p class="big">78<small>%</small></p>
+        <div class="bar" role="img" aria-label="Battery 78 percent"><span></span></div>
+      </article>
+      <article class="card kpi">
+        <h2>Sent to grid</h2>
+        <p class="big">7.2<small>kWh</small></p>
+        <span class="delta up">Earning ₹46</span>
+      </article>
+
+      <article class="card chart span-2 span-3">
+        <h2>Generation and usage by hour</h2>
+        <svg viewBox="0 0 600 245" role="img" aria-label="Line chart: solar generation peaks around noon; usage peaks in the evening">
+          <g class="ax"><line x1="30" y1="200" x2="590" y2="200"/><line x1="30" y1="140" x2="590" y2="140"/><line x1="30" y1="80" x2="590" y2="80"/></g>
+          <g transform="translate(0,10)"><path d="M30 190 C100 188 140 150 200 100 S300 30 350 38 S450 120 500 170 S570 190 590 190" fill="none" stroke="var(--sun-500)" stroke-width="3" stroke-linecap="round"/>
+          <path d="M30 160 C90 165 130 150 190 140 S300 150 360 135 S450 80 510 70 S570 120 590 135" fill="none" stroke="var(--brand-500)" stroke-width="3" stroke-linecap="round"/></g>
+          <text x="30" y="238">6am</text><text x="190" y="238">10am</text><text x="350" y="238">2pm</text><text x="510" y="238">6pm</text>
+          <circle cx="16" cy="18" r="7" fill="var(--sun-500)"/><text x="30" y="27">Solar</text>
+          <circle cx="150" cy="18" r="7" fill="var(--brand-500)"/><text x="164" y="27">Usage</text>
+        </svg>
+      </article>
+
+      <article class="card span-side">
+        <h2>Biggest users right now</h2>
+        <ul class="list">
+          <li><span><i class="dot"></i>Air conditioner</span><strong>1.8 kW</strong></li>
+          <li><span><i class="dot"></i>Water heater</span><strong>1.2 kW</strong></li>
+          <li><span><i class="dot warn"></i>Car charger</span><strong>0.9 kW</strong></li>
+        </ul>
+      </article>
+
+      <article class="card alerts">
+        <h2>Alerts</h2>
+        <ul class="list">
+          <li><span><i class="dot warn"></i>Panel 4 output is 18% lower than its neighbours</span><strong>Check panel</strong></li>
+          <li><span><i class="dot"></i>Battery will be full by 3:40 pm</span><strong>On track</strong></li>
+        </ul>
+      </article>
+    </section>
+  </main>
+</div>
+<script>
+(function(){
+  var root=document.documentElement, btn=document.getElementById('theme');
+  try{var s=localStorage.getItem('theme'); if(s) root.setAttribute('data-theme',s);}catch(e){}
+  btn.addEventListener('click',function(){
+    var dark=root.getAttribute('data-theme')==='dark' ||
+      (!root.getAttribute('data-theme') && matchMedia('(prefers-color-scheme: dark)').matches);
+    var next=dark?'light':'dark';
+    root.setAttribute('data-theme',next);
+    try{localStorage.setItem('theme',next);}catch(e){}
+  });
+  document.querySelectorAll('.range button').forEach(function(b){
+    b.addEventListener('click',function(){
+      document.querySelectorAll('.range button').forEach(function(x){x.setAttribute('aria-pressed','false')});
+      b.setAttribute('aria-pressed','true');
+    });
+  });
+})();
+</script>
+</body>
+</html>
